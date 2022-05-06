@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController2D controller;
     public Animator animator;
 
+    public KeyCode left_key;
+    public KeyCode right_key;
+    public KeyCode jump_key;
+
     public float runSpeed = 40f;
 
     float horizontalMove = 0f;
@@ -16,11 +20,20 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        if (Input.GetKey(left_key))
+        {
+            horizontalMove = -runSpeed;
+        }else if (Input.GetKey(right_key))
+        {
+            horizontalMove = runSpeed;
+        }else
+        {
+            horizontalMove = 0f;
+        }
 
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetKey(jump_key))
         {
             jump = true;
             animator.SetBool("isJumping", true);
