@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Scripts"
   ],
-  "SelectedNode": "\\Character2DController.cs",
+  "SelectedNode": "\\Scripts\\InicioJugador.cs",
   "PreviewInSolutionExplorer": false
 }
