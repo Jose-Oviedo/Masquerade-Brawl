@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d93b6d612fe314585623bcace9cda1, type: 3}
   m_Name: player
   m_EditorClassIdentifier: 
-  personajeJugable: {fileID: 4720972348750217508, guid: 480559e91d2865047a37b3320661bc38, type: 3}
+  controladorAnimacion: {fileID: 9100000, guid: 485d2e6d4bb97394eaef0a95b9f353a0, type: 2}
   imagen: {fileID: 21300000, guid: 72de0c64f2c6a498096698322c976a67, type: 3}
   nombre: Foxxy

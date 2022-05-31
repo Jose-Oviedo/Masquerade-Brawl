@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEditor.Animations;
 
 public class PlayerMovement : MonoBehaviour
 {
 
     public CharacterController2D controller;
+    private PlayerConfiguration playerConfig;
+    private PlayerControls playerControls;
     public Animator animator;
 
+    
     /*//this might be usefull later, with some changes
     public KeyCode left_key;
     public KeyCode right_key;
@@ -24,6 +28,42 @@ public class PlayerMovement : MonoBehaviour
     private bool jumpPressed   = false,
                  crouchPressed = false;
 
+    private void Awake()
+    {
+        playerControls = new PlayerControls();
+    }
+
+    public void Initialize(PlayerConfiguration pc)
+    {
+        playerConfig = pc;
+        RuntimeAnimatorController AC = GameManager.Instance.personajes[pc.characterIndex].controladorAnimacion;
+        //assign the animator controller based on the character the player selected
+        animator.runtimeAnimatorController = AC;
+
+        playerConfig.input.onActionTriggered += Input_onActionTriggered;
+        playerConfig.input.SwitchCurrentActionMap("Player");
+    }
+
+    private void Input_onActionTriggered(InputAction.CallbackContext context)
+    {
+        //--------------assign all actions here -------------
+        //move horizontally
+        if (context.action.name == playerControls.Player.Horizontal.name)
+        {
+            Horizontal(context);
+        }
+        //Jump
+        if (context.action.name == playerControls.Player.Jump.name)
+        {
+            Jump(context);
+        }//Crouch
+        if (context.action.name == playerControls.Player.Crouch.name)
+        {
+            Crouch(context);
+        }
+        //...
+
+    }
     // Update is called once per frame
     void Update()
     {

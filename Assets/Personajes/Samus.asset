@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d93b6d612fe314585623bcace9cda1, type: 3}
   m_Name: Samus
   m_EditorClassIdentifier: 
-  personajeJugable: {fileID: 224163126917206050, guid: 09aac3047bb473b41b0ef0b5f806f5b0, type: 3}
+  controladorAnimacion: {fileID: 9100000, guid: 75c082debf8d7d24d96967f90f888da2, type: 2}
   imagen: {fileID: 21300000, guid: b034563c0b21e01458dd4fc694552e88, type: 3}
   nombre: Samus
