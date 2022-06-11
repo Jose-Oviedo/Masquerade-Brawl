@@ -4,46 +4,49 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEditor.Animations;
 
+//class to handle inputs
 public class PlayerMovement : MonoBehaviour
 {
 
     public CharacterController2D controller;
     private PlayerConfiguration playerConfig;
-    private PlayerControls playerControls;
-    public Animator animator;
+    private PlayerControls playerControls; //to handle inputs
+    private Animator animator;
 
-    
-    /*//this might be usefull later, with some changes
-    public KeyCode left_key;
-    public KeyCode right_key;
-    public KeyCode jump_key;
-    */
     public float runSpeed = 40f;
 
     float horizontalMove = 0f;
+
     //state
     bool jump   = false,
          crouch = false;
+    
     //button pressed
     private bool jumpPressed   = false,
                  crouchPressed = false;
 
+    //on creation obtain animator component and initialize playerControls
     private void Awake()
     {
         playerControls = new PlayerControls();
+        animator = GetComponent<Animator>();
     }
 
+    //initialize player from playerConfig
     public void Initialize(PlayerConfiguration pc)
     {
         playerConfig = pc;
+
+        //set animator controller based on the character the player selected
         RuntimeAnimatorController AC = GameManager.Instance.personajes[pc.characterIndex].controladorAnimacion;
-        //assign the animator controller based on the character the player selected
         animator.runtimeAnimatorController = AC;
 
+        //set listener function for actionTriggered, and change action map to gameplay map
         playerConfig.input.onActionTriggered += Input_onActionTriggered;
         playerConfig.input.SwitchCurrentActionMap("Player");
     }
 
+    //read all actions and redirect to each specific action
     private void Input_onActionTriggered(InputAction.CallbackContext context)
     {
         //--------------assign all actions here -------------
@@ -61,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Crouch(context);
         }
-        //...
+        //shoot/openMenu/...
 
     }
     // Update is called once per frame
@@ -84,7 +87,14 @@ public class PlayerMovement : MonoBehaviour
             crouch = false;
         }
     }
+    // Physics Update
+    void FixedUpdate()
+    {
+        controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+        jump = false;
+    }
 
+    //---------------animation methods-----------------
     public void OnLanding()
     {
         animator.SetBool("isJumping", false);
@@ -93,13 +103,8 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetBool("isCrouching", isCrouching);
     }
-    void FixedUpdate()
-    {
-        controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-        jump = false;
-    }
 
-    //Input System methods---------------
+    //---------------Input System methods---------------
     //reads the input of the horizontal action (a-> -1 d->1; similar with other controls)
     public void Horizontal(InputAction.CallbackContext context)
     {
@@ -112,6 +117,7 @@ public class PlayerMovement : MonoBehaviour
         jumpPressed = context.performed;
 
     }
+    //reads input of crouch action
     public void Crouch(InputAction.CallbackContext context)
     {
         crouchPressed = context.action.triggered;

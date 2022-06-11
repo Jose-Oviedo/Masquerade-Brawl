@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
+//class to initialize player controller within the character selection scene
 public class PlayerSetupMenuController : MonoBehaviour
 {
     private int playerIndex;
@@ -14,6 +14,7 @@ public class PlayerSetupMenuController : MonoBehaviour
     [SerializeField] private Image characterImg;
     [SerializeField] private Button readyButton;
 
+    // this is not used yet
     [SerializeField] private GameObject readyPanel;
     [SerializeField] private GameObject menuPanel;
 
@@ -21,15 +22,12 @@ public class PlayerSetupMenuController : MonoBehaviour
 
     int selectedCharacterIndex = 0;
 
-    private float ignoreInputTime = 1.5f;
-    private bool inputEnabled = false;
-
-
-    public void setPlayerIndex(int pi)
+    //set player Index, obtain GameManager instance and update screen with player index
+    public void SetPlayerIndex(int pi)
     {
         playerIndex = pi;
         playerNumberText.SetText("Player " + (pi + 1).ToString());
-        ignoreInputTime = Time.time + ignoreInputTime;
+        selectedCharacterIndex = PlayerPrefs.GetInt("Jugador" + playerIndex.ToString() + "Index");
         gameManager = GameManager.Instance;
         ActualizarPantalla();
     }
@@ -50,12 +48,14 @@ public class PlayerSetupMenuController : MonoBehaviour
         selectedCharacterIndex = (selectedCharacterIndex == 0) ? gameManager.personajes.Count - 1 : selectedCharacterIndex - 1;
         ActualizarPantalla();
     }
+    //update the canvas with the current character selected
     private void ActualizarPantalla()
     {
         PlayerPrefs.SetInt("Jugador" +playerIndex.ToString() +"Index", selectedCharacterIndex);
         characterImg.sprite = gameManager.personajes[selectedCharacterIndex].imagen;
         characterName.text = gameManager.personajes[selectedCharacterIndex].nombre;
     }
+    //confirm character selection
     public void ChooseCharacter()
     {
         gameManager.setPlayerCharacter(playerIndex, selectedCharacterIndex);
@@ -66,10 +66,7 @@ public class PlayerSetupMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time > ignoreInputTime)
-        {
-            inputEnabled = true;
-        }
+ 
     }
 
 }

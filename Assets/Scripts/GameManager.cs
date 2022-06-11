@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+//class to manage events, from character selection to instancing players in the map
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     private bool allPlayersReady = false;
     private bool sceneChanged = false;
 
+    //on creation make it singleton
     private void Awake()
     {
         if (GameManager.Instance == null)
@@ -41,25 +43,30 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        
+
+        //if it does not exist already add it to the list
         if (!playerConfigs.Any(p => p.playerIndex == pi.playerIndex))
         {
             pi.transform.SetParent(transform);
             pi.SwitchCurrentActionMap("UI");
             playerConfigs.Add(new PlayerConfiguration(pi));
         }
+
+        //if all players were ready but another joined (max4) unset timer to change scene
         if (allPlayersReady && !sceneChanged)
         {
             UICanvas.UnSetTimer();
+            allPlayersReady = false;
         }
-        allPlayersReady = false;
     }
 
+    //set character selection for player[playerIndex]
     public void setPlayerCharacter(int playerIndex, int characterindex)
     {
         playerConfigs[playerIndex].characterIndex = characterindex;
     }
 
+    //set player as ready, if all ready start timer to begin game
     public void readyPlayer(int index)
     {  
         playerConfigs[index].isReady = true;
@@ -71,6 +78,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    //change PlayerInput action map for all current players
     private void SetActionMaps()
     {
         foreach(var config in playerConfigs)
@@ -79,13 +87,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //when scene changes from character selection to gameplay change action map (to control the player)
     public void SceneChanged()
     {
+        GetComponent<PlayerInputManager>().DisableJoining();
         sceneChanged = true;
         SetActionMaps();
     }
 }
 
+//class that holds the config for a player
 public class PlayerConfiguration
 {
     public PlayerConfiguration(PlayerInput pi)

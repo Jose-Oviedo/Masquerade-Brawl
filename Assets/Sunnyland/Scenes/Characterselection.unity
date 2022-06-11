@@ -722,7 +722,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e1cab7bbaee43f4bb1c010682857ec2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imagen: {fileID: 0}
   timerPanel: {fileID: 779546047}
   timer: {fileID: 1077116164}
 --- !u!114 &1729141491
