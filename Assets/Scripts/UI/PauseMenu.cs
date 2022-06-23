@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
-    public PlayerInput playerInput;
+    public PlayerControls playerInput;
     public static bool gameIsPaused = false;
 
     private bool pausePressed = false;
@@ -43,11 +44,12 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("quitting game....     TODO");
+        Application.Quit();
     }
     public void LoadMenu()
     {
-        Debug.Log("loading game....     TODO");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void PressPause(InputAction.CallbackContext context)
@@ -57,7 +59,22 @@ public class PauseMenu : MonoBehaviour
             pausePressed = true;
             //playerInput.SwitchCurrentActionMap("UI");//testing...
         }
-            Debug.Log("aaaa");
+    }
+
+    void Awake()
+    {
+        playerInput = new PlayerControls();
+        playerInput.Player.OpenMenu.started += ctx => Pause();
+    }
+
+    void OnEnable()
+    {
+        playerInput.Player.Enable();
+    }
+
+    void OnDisable()
+    {
+        playerInput.Player.Disable();
     }
 
 }
