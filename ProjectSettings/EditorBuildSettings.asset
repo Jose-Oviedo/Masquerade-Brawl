@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sunnyland/Scenes/mapa3.unity
     guid: 2425029e6dcf1274e90e7d2853249460
+  - enabled: 1
+    path: Assets/Sunnyland/Scenes/EndGame.unity
+    guid: 8690c4a5e8f626d4b92b4695624f1529
   m_configObjects: {}

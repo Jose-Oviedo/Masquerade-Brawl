@@ -15,5 +15,5 @@ MonoBehaviour:
   controladorAnimacion: {fileID: 9100000, guid: 485d2e6d4bb97394eaef0a95b9f353a0, type: 2}
   imagen: {fileID: 21300000, guid: 72de0c64f2c6a498096698322c976a67, type: 3}
   nombre: Foxxy
-  maxHealth: 0
+  maxHealth: 50
   defaultWeapon: {fileID: 1095859808330988914, guid: 2f76af27b7fc6fc4ebf8d957ba7151ef, type: 3}

@@ -115,9 +115,6 @@ public class PlayerMovement : MonoBehaviour
 
             }
         }
-        
-
-
         //openMenu/...
 
     }
@@ -204,15 +201,10 @@ public class PlayerMovement : MonoBehaviour
             if (hand)
             {
                 w = hand.GetComponentInChildren<WeaponController>();
-                Debug.Log("por alguna razon se le ha caido la mano ª te me cuidas");
-
             }
             if (w)
                 w.Shoot(gameObject.layer);
-            else
-            {
-                Debug.Log("no weapon hehe");
-            }
+            
         }
     }
 
@@ -222,10 +214,6 @@ public class PlayerMovement : MonoBehaviour
         Vector3 aimedDir = (aimedPos - hand.transform.position).normalized;
         float anglez = Mathf.Atan2(aimedDir.y, aimedDir.x) * Mathf.Rad2Deg;
         float anglex = 0f;
-        //Vector3 rotation = new Vector3(0,0, Vector2.SignedAngle(hand.transform.position, aimedPos));
-        //float angle = Vector3.SignedAngle(aimedPos, hand.transform.right, Vector3.forward);
-           //anglez = anglez * transform.right.x;
-        //Debug.Log("angle " + anglez);
 
         if (transform.right.x<0)
         {
@@ -233,23 +221,10 @@ public class PlayerMovement : MonoBehaviour
             anglez -= 180f;
         }
 
-        //if (Mathf.Abs(anglez) > 90)
-        //{
-        //    anglex += 180f;
-        //    anglez += -anglez;
-        //}
-
         hand.transform.localEulerAngles = new Vector3(-anglex, 0,anglez);
     }
     private void SetCrossHairPos()
     {
-        //aimedPos = (aimedPos - transform.position);
-        
-        //transform.GetChild(3).transform.position = aimedPos;
-        transform.GetChild(3).position = aimedPos ;
-
-        //Debug.Log("aimedPos " + aimedPos.ToString());
-
-
+        transform.GetChild(3).position = aimedPos;
     }
 }
