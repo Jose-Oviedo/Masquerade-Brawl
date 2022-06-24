@@ -6,10 +6,23 @@ using UnityEngine.Audio;
 
 public class MusicSettings : MonoBehaviour
 {
-
+    public static MusicSettings Instance;
     public Toggle checkbox;
     public AudioSource Music;
     public AudioMixer Mixer;
+
+    private void Awake()
+    {
+        if (MusicSettings.Instance == null)
+        {
+            MusicSettings.Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
