@@ -2574,6 +2574,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5850949909889997772, guid: 13c356312a4422e4eafad800e12e8456, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5850949909889997773, guid: 13c356312a4422e4eafad800e12e8456, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -2620,6 +2624,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5850949909889997774, guid: 13c356312a4422e4eafad800e12e8456, type: 3}
       propertyPath: m_Name
+      value: Music
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850949909889997774, guid: 13c356312a4422e4eafad800e12e8456, type: 3}
+      propertyPath: m_TagString
       value: Music
       objectReference: {fileID: 0}
     - target: {fileID: 5850949909889997775, guid: 13c356312a4422e4eafad800e12e8456, type: 3}

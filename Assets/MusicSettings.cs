@@ -44,6 +44,20 @@ public class MusicSettings : MonoBehaviour
         
     }
 
+    public void MuteMusic(bool boton)
+    {
+        if (boton)
+        {
+            Music.Pause();
+            PlayerPrefs.SetString("Mute", "true");
+        }
+        else
+        {
+            Music.Play();
+            PlayerPrefs.SetString("Mute", "false");
+        }
+    }
+
     public void MuteMusic()
     {
         if (checkbox.isOn)
