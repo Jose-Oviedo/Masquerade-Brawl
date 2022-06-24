@@ -10,5 +10,6 @@ public class Personajes : ScriptableObject
     public RuntimeAnimatorController controladorAnimacion;
     public Sprite imagen;
     public string nombre;
-
+    public int maxHealth;
+    public GameObject defaultWeapon;
 }

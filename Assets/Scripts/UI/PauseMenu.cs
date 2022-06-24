@@ -48,6 +48,8 @@ public class PauseMenu : MonoBehaviour
     }
     public void LoadMenu()
     {
+        //se destruye el gameManager para que no de problemas, luego se crea otro automaticamente
+        Destroy(GameManager.Instance.gameObject);
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }

@@ -15,3 +15,5 @@ MonoBehaviour:
   controladorAnimacion: {fileID: 9100000, guid: 75c082debf8d7d24d96967f90f888da2, type: 2}
   imagen: {fileID: 21300000, guid: b034563c0b21e01458dd4fc694552e88, type: 3}
   nombre: Samus
+  maxHealth: 0
+  defaultWeapon: {fileID: 1095859808330988914, guid: 4ffb280cf0d17b445a8a714666eaa7fd, type: 3}

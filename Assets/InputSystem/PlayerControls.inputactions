@@ -1,5 +1,5 @@
 {
-    "name": "Player",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Player",
@@ -36,6 +36,15 @@
                     "name": "Crouch",
                     "type": "Button",
                     "id": "794517f7-8b4f-4cb5-9d8e-88a2b609d503",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Shoot",
+                    "type": "Button",
+                    "id": "6decae22-bb70-485d-aad7-fc100ee1c843",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -156,7 +165,7 @@
                 {
                     "name": "gamepad",
                     "id": "089d1f7b-4579-4540-82cd-ebffd4a0c192",
-                    "path": "1DAxis",
+                    "path": "1DAxis(minValue=-2,maxValue=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -216,6 +225,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "97bff700-0ee7-4668-8eff-1d6a5d2a2fea",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d8e5f3e6-d710-40b8-971f-5545dce35381",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

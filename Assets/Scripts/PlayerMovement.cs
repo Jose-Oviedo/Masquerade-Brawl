@@ -9,13 +9,17 @@ public class PlayerMovement : MonoBehaviour
 {
 
     public CharacterController2D controller;
+    public GameObject hand;
     private PlayerConfiguration playerConfig;
     private PlayerControls playerControls; //to handle inputs
     private Animator animator;
 
-    public float runSpeed = 40f;
 
+    public float runSpeed = 80f;
     float horizontalMove = 0f;
+
+    int maxHealth = 0;
+    int currentHealth = 0;
 
     //state
     bool jump   = false,
@@ -37,9 +41,19 @@ public class PlayerMovement : MonoBehaviour
     {
         playerConfig = pc;
 
+        //---- scripted object (Personaje) settings ----
         //set animator controller based on the character the player selected
         RuntimeAnimatorController AC = GameManager.Instance.personajes[pc.characterIndex].controladorAnimacion;
         animator.runtimeAnimatorController = AC;
+
+        //set max health
+        maxHealth = GameManager.Instance.personajes[pc.characterIndex].maxHealth;
+        currentHealth = maxHealth;
+
+        //default weapon, instantiated in the hand, as a child of that gameObject
+        var weapon = GameManager.Instance.personajes[pc.characterIndex].defaultWeapon;
+        Instantiate(weapon, hand.transform.position, hand.transform.rotation, hand.transform);
+        
 
         //set listener function for actionTriggered, and change action map to gameplay map
         playerConfig.input.onActionTriggered += Input_onActionTriggered;
@@ -65,6 +79,19 @@ public class PlayerMovement : MonoBehaviour
             Crouch(context);
         }
         //shoot/openMenu/...
+        if (context.action.name == playerControls.Player.Shoot.name)
+        {
+            if (context.action.triggered)
+            {
+                WeaponController w = hand.GetComponentInChildren<WeaponController>();
+                if (w)
+                    w.Shoot();
+                else
+                {
+                    Debug.Log("no weapon hehe");
+                }
+            }
+        }
 
     }
     // Update is called once per frame
@@ -94,6 +121,15 @@ public class PlayerMovement : MonoBehaviour
         jump = false;
     }
 
+    public void TakeDamage(int dmg)
+    {
+        currentHealth -= dmg;
+        if (currentHealth<=0)
+        {
+            Debug.Log("aaaaa te moriste");
+        }
+    }
+
     //---------------animation methods-----------------
     public void OnLanding()
     {
@@ -108,13 +144,15 @@ public class PlayerMovement : MonoBehaviour
     //reads the input of the horizontal action (a-> -1 d->1; similar with other controls)
     public void Horizontal(InputAction.CallbackContext context)
     {
-        float inputMovement = context.ReadValue<float>();
+        //this only affects controller input as it is analog, keyboard is already -1.0 or 1.0
+        float inputMovement = Mathf.Clamp( context.ReadValue<float>(), -1.0f, 1.0f  );
+        
         horizontalMove = inputMovement * runSpeed;
     }
     //reads the input of the jump action
     public void Jump(InputAction.CallbackContext context)
     {
-        jumpPressed = context.performed;
+        jumpPressed = context.action.triggered;
 
     }
     //reads input of crouch action
