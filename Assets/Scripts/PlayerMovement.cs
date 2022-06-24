@@ -29,6 +29,10 @@ public class PlayerMovement : MonoBehaviour
     private bool jumpPressed   = false,
                  crouchPressed = false;
 
+    //
+    Vector3 aimedPos = new Vector3(0,0,0);
+
+
     //on creation obtain animator component and initialize playerControls
     private void Awake()
     {
@@ -40,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     public void Initialize(PlayerConfiguration pc)
     {
         playerConfig = pc;
+        gameObject.layer = LayerMask.NameToLayer("Player" + pc.playerIndex.ToString());
 
         //---- scripted object (Personaje) settings ----
         //set animator controller based on the character the player selected
@@ -58,6 +63,13 @@ public class PlayerMovement : MonoBehaviour
         //set listener function for actionTriggered, and change action map to gameplay map
         playerConfig.input.onActionTriggered += Input_onActionTriggered;
         playerConfig.input.SwitchCurrentActionMap("Player");
+        
+        if (hand == null)
+        {
+            hand = transform.GetChild(2).gameObject;
+        }
+        Debug.Log("Init player" + playerConfig.playerIndex);
+
     }
 
     //read all actions and redirect to each specific action
@@ -78,22 +90,38 @@ public class PlayerMovement : MonoBehaviour
         {
             Crouch(context);
         }
-        //shoot/openMenu/...
+        //shoot
         if (context.action.name == playerControls.Player.Shoot.name)
         {
+            Shoot(context);
+        }
+        //shoot
+        if (context.action.name == playerControls.Player.Aim.name)
+        {
+            //world pos of the target
             if (context.action.triggered)
+                aimedPos = context.ReadValue<Vector2>();
+
+            if (context.control.device.name.Contains("Mouse"))
             {
-                WeaponController w = hand.GetComponentInChildren<WeaponController>();
-                if (w)
-                    w.Shoot();
-                else
-                {
-                    Debug.Log("no weapon hehe");
-                }
+                aimedPos = Camera.main.ScreenToWorldPoint(aimedPos);
+                aimedPos.z = 0f;
+            }
+            else
+            {
+                if (hand)
+                    aimedPos = hand.transform.position + aimedPos*2;
+                else Debug.Log("por alguna razon se le ha caido la mano ªªªªªª te me cuidas");
+
             }
         }
+        
+
+
+        //openMenu/...
 
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -113,6 +141,12 @@ public class PlayerMovement : MonoBehaviour
         {
             crouch = false;
         }
+        if (Time.timeScale != 0)
+        {
+            RotateGun();
+
+            SetCrossHairPos();
+        }
     }
     // Physics Update
     void FixedUpdate()
@@ -123,10 +157,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
+        Debug.Log(playerConfig.playerIndex + " health " + currentHealth);
         currentHealth -= dmg;
         if (currentHealth<=0)
         {
-            Debug.Log("aaaaa te moriste");
+            GameManager.Instance.playerDied(playerConfig.playerIndex);
         }
     }
 
@@ -146,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //this only affects controller input as it is analog, keyboard is already -1.0 or 1.0
         float inputMovement = Mathf.Clamp( context.ReadValue<float>(), -1.0f, 1.0f  );
-        
+
         horizontalMove = inputMovement * runSpeed;
     }
     //reads the input of the jump action
@@ -161,5 +196,60 @@ public class PlayerMovement : MonoBehaviour
         crouchPressed = context.action.triggered;
     }
 
+    public void Shoot(InputAction.CallbackContext context)
+    {
+        if (context.action.triggered)
+        {
+            WeaponController w=null;
+            if (hand)
+            {
+                w = hand.GetComponentInChildren<WeaponController>();
+                Debug.Log("por alguna razon se le ha caido la mano ª te me cuidas");
 
+            }
+            if (w)
+                w.Shoot(gameObject.layer);
+            else
+            {
+                Debug.Log("no weapon hehe");
+            }
+        }
+    }
+
+    private void RotateGun()
+    {
+        //aimedPos = Mouse.current.position.ReadValue();
+        Vector3 aimedDir = (aimedPos - hand.transform.position).normalized;
+        float anglez = Mathf.Atan2(aimedDir.y, aimedDir.x) * Mathf.Rad2Deg;
+        float anglex = 0f;
+        //Vector3 rotation = new Vector3(0,0, Vector2.SignedAngle(hand.transform.position, aimedPos));
+        //float angle = Vector3.SignedAngle(aimedPos, hand.transform.right, Vector3.forward);
+           //anglez = anglez * transform.right.x;
+        //Debug.Log("angle " + anglez);
+
+        if (transform.right.x<0)
+        {
+            anglex -= 180f;
+            anglez -= 180f;
+        }
+
+        //if (Mathf.Abs(anglez) > 90)
+        //{
+        //    anglex += 180f;
+        //    anglez += -anglez;
+        //}
+
+        hand.transform.localEulerAngles = new Vector3(-anglex, 0,anglez);
+    }
+    private void SetCrossHairPos()
+    {
+        //aimedPos = (aimedPos - transform.position);
+        
+        //transform.GetChild(3).transform.position = aimedPos;
+        transform.GetChild(3).position = aimedPos ;
+
+        //Debug.Log("aimedPos " + aimedPos.ToString());
+
+
+    }
 }

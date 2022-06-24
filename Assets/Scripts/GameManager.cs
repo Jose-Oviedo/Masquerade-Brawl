@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 //class to manage events, from character selection to instancing players in the map
 public class GameManager : MonoBehaviour
@@ -16,7 +17,8 @@ public class GameManager : MonoBehaviour
 
     private bool allPlayersReady = false;
     private bool sceneChanged = false;
-
+    private bool leavingMenu = true;
+    private int playersDead = 0;
     //on creation make it singleton
     private void Awake()
     {
@@ -73,8 +75,25 @@ public class GameManager : MonoBehaviour
         if (playerConfigs.All(p => p.isReady == true))
         {
             allPlayersReady = true;
-            //TODOOOOOOOO
             UICanvas.SetTimer();
+            leavingMenu = false;
+        }
+    }
+    public void playerDied(int index)
+    {
+        Debug.Log(index + "died");
+        //it was already dead
+        if (playerConfigs[index].isReady)
+        {
+            Debug.Log(index + "was already dead");
+            return;
+        }
+
+        playersDead++;
+        if (playersDead == playerConfigs.Count-1)
+        {
+            SceneChanged();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
     
@@ -87,12 +106,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void ClearPlayerReady()
+    {
+        foreach (var config in playerConfigs)
+        {
+            config.isReady=false;
+        }
+    }
     //when scene changes from character selection to gameplay change action map (to control the player)
     public void SceneChanged()
     {
-        GetComponent<PlayerInputManager>().DisableJoining();
-        sceneChanged = true;
-        SetActionMaps();
+        if (leavingMenu)
+        {
+            GetComponent<PlayerInputManager>().DisableJoining();
+            SetActionMaps();
+            sceneChanged = true;
+        }
+        ClearPlayerReady();
+        playersDead = 0;
     }
 }
 

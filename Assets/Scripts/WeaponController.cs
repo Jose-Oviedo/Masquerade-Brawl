@@ -28,11 +28,14 @@ public class WeaponController : MonoBehaviour
         
     }
 
-    public void Shoot()
+    public void Shoot(LayerMask isNotEnemy)
     {
         if (readyToShoot && !reloading)
         {
-            Instantiate(bulletPrefab, firePoint.position, firePoint.rotation).GetComponentInChildren<Animator>().Play("Bullet" + bulletID.ToString());
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            bullet.GetComponentInChildren<Animator>().Play("Bullet" + bulletID.ToString());
+            bullet.GetComponent<Bullet>().SetFrienlyLayer(isNotEnemy);
+
             bulletsLeft--;
             readyToShoot = false;
             Invoke("ResetShot", timeBetweenShooting);
