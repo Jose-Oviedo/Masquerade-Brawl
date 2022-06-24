@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sunnyland/Scenes/demo.unity
     guid: cbd2611183a8d41e8b5ae48b2b35bbf1
+  - enabled: 1
+    path: Assets/Sunnyland/Scenes/mapa2.unity
+    guid: 34ac5fd033169ff47a999b80fbd94966
+  - enabled: 1
+    path: Assets/Sunnyland/Scenes/mapa3.unity
+    guid: 2425029e6dcf1274e90e7d2853249460
   m_configObjects: {}
