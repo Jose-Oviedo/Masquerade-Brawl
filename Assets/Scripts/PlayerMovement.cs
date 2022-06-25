@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerConfiguration playerConfig;
     private PlayerControls playerControls; //to handle inputs
     private Animator animator;
-
+    private bool gamePaused=false;
 
     public float runSpeed = 80f;
     float horizontalMove = 0f;
@@ -68,8 +68,6 @@ public class PlayerMovement : MonoBehaviour
         {
             hand = transform.GetChild(2).gameObject;
         }
-        Debug.Log("Init player" + playerConfig.playerIndex);
-
     }
 
     //read all actions and redirect to each specific action
@@ -77,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //--------------assign all actions here -------------
         //move horizontally
-        if (context.action.name == playerControls.Player.Horizontal.name)
+        if (context.action.name == playerControls.Player.Horizontal.name )
         {
             Horizontal(context);
         }
@@ -86,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump(context);
         }//Crouch
-        if (context.action.name == playerControls.Player.Crouch.name)
+        if (context.action.name == playerControls.Player.Crouch.name )
         {
             Crouch(context);
         }
@@ -98,6 +96,7 @@ public class PlayerMovement : MonoBehaviour
         //shoot
         if (context.action.name == playerControls.Player.Aim.name)
         {
+            aimedPos = hand.transform.position + transform.right * 2;
             //world pos of the target
             if (context.action.triggered)
                 aimedPos = context.ReadValue<Vector2>();
@@ -110,13 +109,17 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 if (hand)
-                    aimedPos = hand.transform.position + aimedPos*2;
-                else Debug.Log("por alguna razon se le ha caido la mano ªªªªªª te me cuidas");
-
+                    aimedPos = hand.transform.position + aimedPos.normalized*2;
+                 
             }
         }
-        //openMenu/...
 
+    }
+
+    public void IsPaused(bool paused)
+    {
+        gamePaused = paused;
+        Debug.Log("game " + paused + " for" + playerConfig.playerIndex);
     }
 
     // Update is called once per frame
@@ -154,7 +157,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        Debug.Log(playerConfig.playerIndex + " health " + currentHealth);
         currentHealth -= dmg;
         if (currentHealth<=0)
         {

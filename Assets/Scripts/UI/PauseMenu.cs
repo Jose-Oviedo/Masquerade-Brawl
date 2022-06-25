@@ -20,6 +20,7 @@ public class PauseMenu : MonoBehaviour
             if (gameIsPaused)
             {
                 Resume();
+
             }
             else
             {
@@ -33,6 +34,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         gameIsPaused = false;
+        BroadcastPause(gameIsPaused);
     }
 
     void Pause()
@@ -40,6 +42,22 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         gameIsPaused = true;
+        BroadcastPause(gameIsPaused);
+    }
+
+    //broadcast pause state to all players
+    private void BroadcastPause(bool paused)
+    {
+        GameObject pM = GameObject.Find("playerManager");
+        if (pM)
+        {
+            var players = FindObjectsOfType<PlayerMovement>();
+
+            foreach (PlayerMovement player in players)
+            {
+                player.IsPaused(paused);
+            }
+        }
     }
 
     public void QuitGame()
@@ -59,7 +77,6 @@ public class PauseMenu : MonoBehaviour
         if (context.performed)
         {
             pausePressed = true;
-            //playerInput.SwitchCurrentActionMap("UI");//testing...
         }
     }
 

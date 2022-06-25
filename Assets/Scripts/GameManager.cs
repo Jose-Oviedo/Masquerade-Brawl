@@ -76,16 +76,13 @@ public class GameManager : MonoBehaviour
         {
             allPlayersReady = true;
             UICanvas.SetTimer();
-            leavingMenu = false;
         }
     }
     public void playerDied(int index)
     {
-        Debug.Log(index + "died");
         //it was already dead
         if (playerConfigs[index].isReady)
         {
-            Debug.Log(index + "was already dead");
             return;
         }
 
@@ -121,6 +118,7 @@ public class GameManager : MonoBehaviour
             GetComponent<PlayerInputManager>().DisableJoining();
             SetActionMaps();
             sceneChanged = true;
+            leavingMenu = false;
         }
         ClearPlayerReady();
         playersDead = 0;
