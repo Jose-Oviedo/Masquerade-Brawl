@@ -96,7 +96,8 @@ public class PlayerMovement : MonoBehaviour
         //shoot
         if (context.action.name == playerControls.Player.Aim.name)
         {
-            aimedPos = hand.transform.position + transform.right * 2;
+            if (hand)
+                aimedPos = hand.transform.position + transform.right * 2;
             //world pos of the target
             if (context.action.triggered)
                 aimedPos = context.ReadValue<Vector2>();
